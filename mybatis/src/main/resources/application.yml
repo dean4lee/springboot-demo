@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/admin?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: root
+
+mybatis:
+  #加载mapper文件
+  mapper-locations: classpath:mapper/*.xml
+  #设置实体类别名
+  #type-aliases-package: demo.springboot.mybatis.domain
+  #加载mybatis全局配置文件
+  #config-location: classpath:mybatis/SqlMapConfig.xml
