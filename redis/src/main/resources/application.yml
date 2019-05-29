@@ -1,0 +1,16 @@
+spring:
+  redis:
+    #地址
+    host: localhost
+    #端口
+    port: 6379
+    #索引库
+    database: 1
+    #密码
+    password:
+    #超时时间
+    timeout: 5000ms
+
+logging:
+  level:
+    root: error
