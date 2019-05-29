@@ -1,0 +1,27 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://106.14.186.54:3306/admin?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: mysql4aliyun
+
+mybatis:
+  #\u52A0\u8F7Dmapper\u6587\u4EF6
+  mapper-locations: classpath:mapper/*.xml
+  #\u8BBE\u7F6E\u5B9E\u4F53\u7C7B\u522B\u540D
+  #type-aliases-package: demo.springboot.mybatismapperpagehelper.domain
+  #\u52A0\u8F7Dmybatis\u5168\u5C40\u914D\u7F6E\u6587\u4EF6
+  #config-location: classpath:mybatis/SqlMapConfig.xml
+
+mapper:
+  #\u901A\u7528mapper\u7684\u7C7B\uFF0C\u53EF\u4EE5\u591A\u4E2A\uFF0C\u4E0D\u8981\u548C\u4E1A\u52A1dao\u653E\u5230\u4E00\u8D77
+  mappers: demo.springboot.mybatismapperpagehelper.basedao.BaseMapper
+
+logging:
+  level:
+    root: error
+    demo.springboot: debug
