@@ -6,7 +6,11 @@
 
   <groupId>demo.springboot</groupId>
   <artifactId>springboot-demo</artifactId>
+  <packaging>pom</packaging>
   <version>1.0-SNAPSHOT</version>
+  <modules>
+    <module>dubbo</module>
+  </modules>
 
   <name>Maven</name>
   <!-- FIXME change it to the project's website -->

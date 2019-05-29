@@ -1,0 +1,19 @@
+application:
+  #版本号
+  version: 1.0.0
+
+dubbo:
+  application:
+    #应用名称，每个dubbo应用的名称都是唯一的
+    name: dubbo-producer
+  registry:
+    #注册中心
+    address: zookeeper://172.16.77.131:2181
+  protocol:
+    #协议名称
+    name: dubbo
+    #服务暴露端口
+    port: 20880
+  scan:
+    #扫描服务注册bean
+    basePackages: demo.springboot.service.impl
