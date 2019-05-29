@@ -1,0 +1,4 @@
+logging:
+  level:
+    root: error
+    demo.springboot: debug
