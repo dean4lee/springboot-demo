@@ -1,0 +1,12 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+bean:
+  name: springboot
+  age: 20
+
+spring:
+  profiles:
+    include: db
