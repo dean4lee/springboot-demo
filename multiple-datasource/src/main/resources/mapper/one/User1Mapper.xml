@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="demo.springboot.multipledatasource.dao1.User1DAO">
+    <resultMap id="BaseResultMap" type="demo.springboot.multipledatasource.domain.User">
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="age" property="age" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+            *
+        from
+            `user`
+    </select>
+</mapper>

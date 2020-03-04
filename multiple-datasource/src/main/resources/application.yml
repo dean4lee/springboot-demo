@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    druid:
+      one:
+        driver-class-name: com.mysql.jdbc.Driver
+        url: jdbc:mysql://192.168.211.128:3306/test?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+        username: root
+        password: root
+      two:
+        driver-class-name: com.mysql.jdbc.Driver
+        url: jdbc:mysql://192.168.211.129:3306/test?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+        username: root
+        password: root
+logging:
+  level:
+    root: error
