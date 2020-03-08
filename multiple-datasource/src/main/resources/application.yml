@@ -1,11 +1,14 @@
 spring:
   datasource:
+    #使用druid连接池
     druid:
+      #数据源1的名称
       one:
         driver-class-name: com.mysql.jdbc.Driver
         url: jdbc:mysql://192.168.211.128:3306/test?useUnicode=true&characterEncoding=UTF-8&useSSL=false
         username: root
         password: root
+      #数据源2的名称
       two:
         driver-class-name: com.mysql.jdbc.Driver
         url: jdbc:mysql://192.168.211.129:3306/test?useUnicode=true&characterEncoding=UTF-8&useSSL=false

@@ -28,5 +28,4 @@ public class MultipleDatasourceApplicationTests {
         List<User> users2 = user2DAO.selectAll();
         System.out.println(users2);
     }
-
 }
