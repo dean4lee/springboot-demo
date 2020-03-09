@@ -33,7 +33,7 @@ public class DataSource2Config {
     }
 
     @Bean
-    public DataSourceTransactionManager oneTransactionManager(@Qualifier("twoDataSource")DataSource dataSource){
+    public DataSourceTransactionManager twoTransactionManager(@Qualifier("twoDataSource")DataSource dataSource){
         return new DataSourceTransactionManager(dataSource);
     }
 

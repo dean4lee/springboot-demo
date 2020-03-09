@@ -38,6 +38,7 @@ public class DataSource1Config {
      * @throws Exception
      */
     @Bean
+    @Primary
     public SqlSessionFactory oneSqlSessionFactory(@Qualifier("oneDataSource") DataSource dataSource) throws Exception {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
@@ -47,11 +48,14 @@ public class DataSource1Config {
     }
 
     /**
-     * 事务
+     * 事务管理器
+     * 注解@Primary：当程序中使用@Transactional时，优先使用该事务管理器。
+     * 如果不使用@Primary注解，需要在@Transactional(value="oneTransactionManager")指定事务管理器
      * @param dataSource
      * @return
      */
     @Bean
+    @Primary
     public DataSourceTransactionManager oneTransactionManager(@Qualifier("oneDataSource")DataSource dataSource){
         return new DataSourceTransactionManager(dataSource);
     }
@@ -62,6 +66,7 @@ public class DataSource1Config {
      * @return
      */
     @Bean
+    @Primary
     public SqlSessionTemplate oneSqlSessionTemplate(@Qualifier("oneSqlSessionFactory")SqlSessionFactory sqlSessionFactory) {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
