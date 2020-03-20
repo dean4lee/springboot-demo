@@ -1,0 +1,96 @@
+#分片配置
+spring:
+  shardingsphere:
+    datasource:
+      #数据源名称，多数据源以逗号分隔
+      names: ds0, ds1
+      ds0:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        url: jdbc:mysql://192.168.211.128:3306/sharding-jdbc?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+        username: root
+        password: root
+      ds1:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        url: jdbc:mysql://192.168.211.129:3306/sharding-jdbc?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+        username: root
+        password: root
+
+    sharding:
+      tables:
+        #逻辑表名称(随意取名)，在项目中sql使用
+        t_order:
+          #逻辑表名称指向的实际表，数据源名 + 实际表名组成
+          #ds$->{0..1}代表数据源ds0或者ds1，库分片策略决定使用哪个数据源
+          #t_order$->{0..1}代表表t_order0或者t_order1,表分片策略决定使用哪个表
+          actual-data-nodes: ds$->{0..1}.t_order$->{0..1}
+          #主键生成规则，自动生成主键
+          key-generator:
+            #主键的字段名称
+            column: order_id
+            #雪花算法生成主键
+            type: SNOWFLAKE
+            #分布式主键需要设置worker.id不能相同
+            props:
+              worker.id = 1
+          #表分片策略
+          table-strategy:
+            #inline行表达式分片
+            inline:
+              #分片字段的名称
+              sharding-column: order_id
+              #分片算法行表达式，需符合groovy语法.
+              #根据order_id%2计算出当前执行的sql是在t_order0还是t_order1中执行
+              algorithm-expression: t_order$->{order_id % 2}
+          #库分片策略
+          database-strategy:
+            inline:
+              #分片字段的名称
+              sharding-column: user_id
+              #分片算法
+              algorithm-expression: ds$->{user_id % 2}
+        #订单详情表配置
+        t_order_item:
+          actual-data-nodes: ds$->{0..1}.t_order_item$->{0..1}
+          key-generator:
+            column: order_item_id
+            type: SNOWFLAKE
+            props:
+              worker.id = 1
+          table-strategy:
+            inline:
+              sharding-column: order_id
+              algorithm-expression: t_order_item$->{order_id % 2}
+          database-strategy:
+            inline:
+              sharding-column: user_id
+              algorithm-expression: ds$->{user_id % 2}
+        #公共表配置
+        t_dict:
+          key-generator:
+            column: id
+            type: SNOWFLAKE
+            props:
+              worker.id = 1
+      #默认的库分片策略，所有的库分片策略相同时使用
+#      default-database-strategy:
+#        inline:
+#          sharding-column: user_id
+#          algorithm-expression: ds$->{user_id % 2}
+
+      #绑定表，垂直分表需要绑定，不绑定会出现笛卡尔积
+      #绑定表的分片策略中的sharding-column配置要相同
+      binding-tables:
+        - t_order, t_order_item
+      #广播表，修改操作会操作所有库的表，即公共表
+      broadcast-tables: t_dict
+    #开启sql显示
+    props:
+      sql.show: true
+
+logging:
+  level:
+    root: error
+    #sharding-jdbc的sql显示日志是info级别
+    ShardingSphere-SQL: info

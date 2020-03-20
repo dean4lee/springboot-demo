@@ -1,0 +1,60 @@
+#读写分离配置
+spring:
+  shardingsphere:
+    datasource:
+      names: master, slave
+      master:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        url: jdbc:mysql://192.168.211.128:3306/sharding-jdbc?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+        username: root
+        password: root
+      slave:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        url: jdbc:mysql://192.168.211.130:3306/sharding-jdbc?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+        username: root
+        password: root
+
+    sharding:
+      #sharding-jdbc支持一主多从
+      master-slave-rules:
+        #读写分离数据源名称
+        ds0:
+          #主数据源的名称，对应数据源中配置的名称
+          master-data-source-name: master
+          #从数据源名称
+          slave-data-source-names: slave
+          #从库负载均衡算法类型，可选值：ROUND_ROBIN，RANDOM
+          #load-balance-algorithm-type: ROUND_ROBIN
+      #分片策略配置不变，只需要在使用读写分离的actual-data-nodes中修改为读写分离数据源名称即可
+      tables:
+        t_order:
+          actual-data-nodes: ds0.t_order$->{0..1}
+          key-generator:
+            column: order_id
+            type: SNOWFLAKE
+            props:
+              worker.id = 1
+          table-strategy:
+            inline:
+              sharding-column: order_id
+              algorithm-expression: t_order$->{order_id % 2}
+        t_order_item:
+          actual-data-nodes: ds0.t_order_item$->{0..1}
+          key-generator:
+            column: order_item_id
+            type: SNOWFLAKE
+            props:
+              worker.id = 1
+          table-strategy:
+            inline:
+              sharding-column: order_id
+              algorithm-expression: t_order_item$->{order_id % 2}
+    props:
+      sql.show: true
+
+logging:
+  level:
+    root: error
+    ShardingSphere-SQL: info
