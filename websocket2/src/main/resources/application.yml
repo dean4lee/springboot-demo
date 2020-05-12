@@ -3,10 +3,10 @@ logging:
     root: error
 spring:
   redis:
-    host: 106.14.186.54
+    host: 192.168.211.100
     port: 6379
     database: 1
-    password: redis4aliyun
+    password:
     timeout: 5000ms
 server:
   port: 8080
