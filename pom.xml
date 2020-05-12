@@ -40,6 +40,8 @@
         <module>jedis-spring-boot-starter</module>
         <module>multiple-datasource</module>
         <module>sharding-jdbc</module>
+        <module>websocket2</module>
+        <module>websocket</module>
     </modules>
 
     <name>springboot-demo</name>

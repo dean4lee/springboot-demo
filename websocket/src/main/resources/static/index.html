@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <!-- sockjs stomp -->
+    <script src="https://cdn.bootcss.com/sockjs-client/1.1.4/sockjs.min.js"></script>
+    <script src="https://cdn.bootcss.com/stomp.js/2.3.3/stomp.min.js"></script>
+    <script>
+        let stompClient = null;
+        //连接websocket
+        function conn() {
+            let uid = $("#uidInput").val();
+            //可以在后面直接拼接参数，在MyHandshakeHandler中校验用户uid
+            let socket = new SockJS('http://localhost:8080/im/conn?uid=' + uid);
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function () {
+                //订阅/user/{uid}/msg这个地址，接收往这个地址发送的消息
+                stompClient.subscribe('/user/' + uid + '/msg', function (msg) {
+                    //后台返回的信息是实体类，将其转换成json，添加到ul中
+                    let msgBody = JSON.parse(msg.body);
+                    $("#userMsg").append("<li>" + msgBody.uid +":"+ msgBody.content + "</li>")
+                });
+                //订阅/topic/sys这个地址，接收往这个地址发送的消息
+                stompClient.subscribe('/topic/sys', function (msg) {
+                    $("#sysMsg").append("<li>" + msg.body + "</li>")
+                });
+                //stompClient.subscribe()....多个订阅地址，也可以在外面定义。前提是stompClient已经连接
+
+                //隐藏连接div
+                $("#connDiv").hide();
+                //显示消息div
+                $("#msgDiv").show();
+            }, function (err) {
+                console.log(err);
+            });
+        }
+
+        //发送一对一消息
+        function send() {
+            let content = $("#content").val();
+            if (!content) {
+                alert("请输入消息");
+            }
+            let toUid = $("#toUid").val();
+            if (!toUid) {
+                alert("请输入发送给用户的uid");
+            }
+            let msg = {"content": content, "toUid": toUid};
+            if (!stompClient) {
+                alert("未连接");
+            }
+            //前端发送消息以/im开头，往send2user中发送消息，消息为JSON.stringify(msg)
+            stompClient.send("/im/send2user", {}, JSON.stringify(msg));
+        }
+    </script>
+</head>
+<body>
+<div id="connDiv">
+    <input type="text" id="uidInput" placeholder="请输入uid">
+    <button onclick="conn()">连接</button>
+</div>
+<div id="msgDiv" style="display: none">
+    <input id="content" type="text" placeholder="消息内容"/>
+    <input id="toUid" type="text" placeholder="发送给用户的uid">
+    <button onclick="send()">发送</button>
+    <br/>
+    <label>用户消息：</label>
+    <ul id="userMsg"></ul>
+    <label>系统消息：</label>
+    <ul id="sysMsg"></ul>
+</div>
+</body>
+</html>
