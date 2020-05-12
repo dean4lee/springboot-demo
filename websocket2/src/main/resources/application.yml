@@ -1,0 +1,12 @@
+logging:
+  level:
+    root: error
+spring:
+  redis:
+    host: 106.14.186.54
+    port: 6379
+    database: 1
+    password: redis4aliyun
+    timeout: 5000ms
+server:
+  port: 8080
