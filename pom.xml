@@ -42,6 +42,7 @@
         <module>sharding-jdbc</module>
         <module>websocket2</module>
         <module>websocket</module>
+        <module>redisson</module>
     </modules>
 
     <name>springboot-demo</name>
